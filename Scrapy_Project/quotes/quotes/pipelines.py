@@ -7,7 +7,13 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 
-
 class QuotesPipeline:
+
     def process_item(self, item, spider):
-        return item
+        with open("quote.xlsx", "a", encoding="utf-8") as excel_file:
+            if excel_file.tell() == 0:
+                header = "quote\tbirthdate\ttags\tlocation\tdescription\tname\n"
+                excel_file.write(header)
+
+            row = "\t".join([item['quote'], item['birthdate'], item['tags'], item['location'], item['description'], item['name']])
+            excel_file.write(f"{row}\n")
